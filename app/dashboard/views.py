@@ -4,7 +4,7 @@ from datetime import date
 from django.db.models import Q, Count
 import gspread
 
-from django.views.generic import ListView
+from django.contrib.auth.decorators import login_required
 
 from dashboard.models import Inquerito, TipoSementeGerminou, TipoAreaGerminacao, VerificacaoSementes
 from dashboard.helpers import Helpers
@@ -20,8 +20,6 @@ def get_data_from_spreadsheet(worksheet: str, sheet: str):
     sh = service_account.open(worksheet)
     wks = sh.worksheet(sheet)
     return wks.get_all_records()
-
-# values_list = worksheet.row_values(1)
 
 
 def refresh_inquerito_data():
@@ -334,17 +332,25 @@ def refresh_verificacao_semente_data():
             verificacao_semente.save()
 
 
+@login_required(login_url="users:login")
 def push_data(request):
     refresh_inquerito_data()
     # return HttpResponse("Data added")
     return render(request, 'dashboard/home.html')
 
 
+@login_required(login_url="users:login")
 def home(request):
-    # refresh_inquerito_data()
-    # refresh_verificacao_semente_data()
-    # return HttpResponse(get_data_from_spreadsheet("Inquerito_resultados", "Folha1"))
-    return render(request, 'dashboard/home.html')
+    inquerito_count = Inquerito.objects.all().count()
+    inquerito_nampula = Inquerito.objects.filter(provincia='Nampula').count()
+    inquerito_cabo_delgado = Inquerito.objects.filter(
+        provincia='Cabo Delgado').count()
+    context = {
+        'inquerito_count': inquerito_count,
+        'inquerito_cabo_delgado': inquerito_cabo_delgado,
+        'inquerito_nampula': inquerito_nampula
+    }
+    return render(request, 'dashboard/home.html', context)
 
 
 def relatorio_posse_machamba(request):
@@ -558,6 +564,7 @@ def relatorio_de_quem_recebeu_semente(request):
     return JsonResponse(json_data)
 
 
+@login_required(login_url="login")
 def index(request):
     machamba_label = []
     machamba_data = []

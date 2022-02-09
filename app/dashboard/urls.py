@@ -4,7 +4,7 @@ from dashboard import views
 app_name = 'dashboard'
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('dashboard/', views.home, name='home'),
     path('push_data', views.push_data, name='push_data'),
     path('relatorio_posse_machamba', views.relatorio_posse_machamba,
          name='relatorio_posse_machamba'),
