@@ -29,13 +29,33 @@
         </div>
 
     </div>
-    <br>
     <div class="row">
         <div class="col-md">
             <br>
-            <h5>Posse da Machamba:</h5>
-            <canvas id="posse_machamba" width="250" height="200"></canvas>
+            <h5>Tipo de Familia:</h5>
+            <canvas id="tipo_familia" width="250" height="200"></canvas>
         </div>
+        <div class="col-md">
+            <br>
+            <h5>Genero:</h5>
+            <canvas id="genero" width="250" height="200"></canvas>
+        </div>
+
+        <div class="col-md">
+            <br>
+            <h5>Criterios elegibilidade:</h5>
+            <canvas id="elegibilidade" width="250" height="200"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <br>
+            <h5>Zona de origem:</h5>
+            <canvas id="comunidade" width="250" height="200"></canvas>
+        </div>
+    </div>
+    <div class="row">
+
         <div class="col-md">
             <br>
             <h5>Pertenca:</h5>
@@ -121,6 +141,87 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md">
+            <br>
+            <h5>Quando realizou sementeira?:</h5>
+            <canvas id="sementeira" width="250" height="200"></canvas>
+        </div>
+
+        <!--  <div class="col-md">
+            <br>
+            <h5>As sementes germinaram?:</h5>
+            <canvas id="germinou" width="250" height="200"></canvas>
+        </div>
+
+        <div class="col-md">
+            <br>
+            <h5>Sementes que não germinaram:</h5>
+            <canvas id="nao_germinou" width="250" height="200"></canvas>
+        </div> -->
+
+        <div class="col-md">
+            <br>
+            <h5>Canais que conhecem para reclamações:</h5>
+            <canvas id="canais" width="250" height="200"></canvas>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md">
+            <br>
+            <h5>Já apresentou alguma reclamação?:</h5>
+            <canvas id="apresentou_reclamacao" width="250" height="200"></canvas>
+        </div>
+        <div class="col-md">
+            <br>
+            <h5>Qual É o canal que usou?:</h5>
+            <canvas id="canal_usado" width="250" height="200"></canvas>
+        </div>
+        <div class="col-md">
+            <br>
+            <h5>Quanto tempo levou para resolver?:</h5>
+            <canvas id="tempo" width="250" height="200"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md">
+            <br>
+            <h5>Ficou satisfeito com a solucao?:</h5>
+            <canvas id="satisfeito" width="250" height="200"></canvas>
+        </div>
+
+        <div class="col-md">
+            <br>
+            <h5>Ja ouviu falar de VBG?:</h5>
+            <canvas id="vbg" width="250" height="200"></canvas>
+        </div>
+        <div class="col-md">
+            <br>
+            <h5> Já foi vítima de VBG?:</h5>
+            <canvas id="vitima_vbg" width="250" height="200"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <br>
+            <h5>Canais para denunciar?:</h5>
+            <canvas id="canais_denuncia" width="250" height="200"></canvas>
+        </div>
+        <div class="col-md">
+            <br>
+            <h5>Teve toda assistência?:</h5>
+            <canvas id="assistencia" width="250" height="200"></canvas>
+        </div>
+
+        <div class="col-md">
+            <br>
+            <h5>Casos de VBG?:</h5>
+            <canvas id="casos_vbg" width="250" height="200"></canvas>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
@@ -140,9 +241,23 @@
         window.onload = renderiza_recebeu_semente("{% url 'dashboard:relatorio_recebeu_semente' %}");
         window.onload = renderiza_tipo_kit("{% url 'dashboard:relatorio_tipo_kit' %}");
         window.onload = renderiza_de_quem_recebeu_semente("{% url 'dashboard:relatorio_de_quem_recebeu_semente' %}");
-
-
-
+        window.onload = renderiza_tipo_familia("{% url 'dashboard:relatorio_tipo_familia' %}");
+        window.onload = renderiza_genero("{% url 'dashboard:relatorio_genero' %}");
+        window.onload = renderiza_elegibilidade("{% url 'dashboard:relatorio_elegibilidade' %}");
+        window.onload = renderiza_comunidade("{% url 'dashboard:relatorio_comunidade' %}");
+        window.onload = renderiza_quando_realizou_sementeira("{% url 'dashboard:relatorio_quando_realizou_sementeira' %}");
+        window.onload = renderiza_sementes_germinou("{% url 'dashboard:relatorio_sementes_germinou' %}");
+        window.onload = renderiza_sementes_nao_germinou("{% url 'dashboard:relatorio_semente_nao_germinou' %}");
+        window.onload = renderiza_canais_reclamacao("{% url 'dashboard:relatorio_canais_reclamacao' %}");
+        window.onload = renderiza_apresentou_reclamacao("{% url 'dashboard:relatorio_apresentou_reclamacao' %}");
+        window.onload = renderiza_canal_usado("{% url 'dashboard:relatorio_canal_usado' %}");
+        window.onload = renderiza_tempo_gasto_resolver("{% url 'dashboard:relatorio_tempo_gasto_resolver' %}");
+        window.onload = renderiza_ficou_satisfeito("{% url 'dashboard:relatorio_ficou_satisfeito' %}");
+        window.onload = renderiza_vbg("{% url 'dashboard:relatorio_ja_ouviu_vbg' %}");
+        window.onload = renderiza_vitima_VBG("{% url 'dashboard:relatorio_vitima_vbg' %}");
+        window.onload = renderiza_canais_denunciar("{% url 'dashboard:relatorio_canais_denunciar' %}");
+        window.onload = renderiza_teve_assistencia("{% url 'dashboard:relatorio_teve_toda_assistencia' %}");
+        window.onload = renderiza_tipo_vbg("{% url 'dashboard:relatorio_tipo_vbg' %}");
 
     </script>
     {% endblock 'content' %}

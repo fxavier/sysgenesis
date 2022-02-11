@@ -564,6 +564,264 @@ def relatorio_de_quem_recebeu_semente(request):
     return JsonResponse(json_data)
 
 
+def relatorio_tipo_familia(request):
+    labels = []
+    data = []
+    tipo_familia = Inquerito.objects.values('tipo_familia').annotate(
+        Count('uuid')).exclude(tipo_familia=None)
+    k_label = [d['tipo_familia'] for d in tipo_familia]
+    k_data = [d['uuid__count'] for d in tipo_familia]
+    for x in k_label:
+        labels.append(x)
+    for y in k_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_genero(request):
+    labels = []
+    data = []
+    genero = Inquerito.objects.values('genero').annotate(
+        Count('uuid')).exclude(genero=None)
+    g_label = [d['genero'] for d in genero]
+    g_data = [d['uuid__count'] for d in genero]
+    for x in g_label:
+        labels.append(x)
+    for y in g_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_elegibilidade(request):
+    labels = []
+    data = []
+    elegibilidade = Inquerito.objects.values('criterios_elegib_agg_familiar').annotate(
+        Count('uuid')).exclude(criterios_elegib_agg_familiar=None)
+    e_label = [d['criterios_elegib_agg_familiar']
+               for d in elegibilidade]
+    e_data = [d['uuid__count'] for d in elegibilidade]
+    for x in e_label:
+        labels.append(x)
+    for y in e_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_comunidade(request):
+    labels = []
+    data = []
+    comunidade = Inquerito.objects.values('comunidade').annotate(
+        Count('uuid')).exclude(comunidade=None)
+    c_label = [d['comunidade'] for d in comunidade]
+    c_data = [d['uuid__count'] for d in comunidade]
+    for x in c_label:
+        labels.append(x)
+    for y in c_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_quando_realizou_sementeira(request):
+    labels = []
+    data = []
+    quando_realizou_sementeira = Inquerito.objects.values('quando_realizou_sementeira').annotate(
+        Count('uuid')).exclude(quando_realizou_sementeira=None)
+    s_label = [d['quando_realizou_sementeira']
+               for d in quando_realizou_sementeira]
+    s_data = [d['uuid__count'] for d in quando_realizou_sementeira]
+    for x in s_label:
+        labels.append(x)
+    for y in s_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_sementes_germinou(request):
+    labels = []
+    data = []
+    sementes_germinou = Inquerito.objects.values('sementes_germinou').annotate(
+        Count('uuid')).exclude(sementes_germinou=None)
+    sg_label = [d['sementes_germinou'] for d in sementes_germinou]
+    sg_data = [d['uuid__count'] for d in sementes_germinou]
+    for x in sg_label:
+        labels.append(x)
+    for y in sg_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_canais_reclamacao(request):
+    labels = []
+    data = []
+    canais_reclamacao = Inquerito.objects.values('canais_apresentar_reclamacao').annotate(
+        Count('uuid')).exclude(canais_apresentar_reclamacao=None)
+    r_labels = [d['canais_apresentar_reclamacao'] for d in canais_reclamacao]
+    r_data = [d['uuid__count'] for d in canais_reclamacao]
+    for x in r_labels:
+        labels.append(x)
+    for y in r_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_semente_nao_germinou(request):
+    labels = []
+    data = []
+    semente_nao_germinou = Inquerito.objects.values('semente_nao_germinou').annotate(
+        Count('uuid')).exclude(semente_nao_germinou=None)
+    n_label = [d['semente_nao_germinou'] for d in semente_nao_germinou]
+    n_data = [d['uuid__count'] for d in semente_nao_germinou]
+    for x in n_label:
+        labels.append(x)
+    for y in n_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_apresentou_reclamacao(request):
+    labels = []
+    data = []
+    apresentou_reclamacao = Inquerito.objects.values('apresentou_reclamacao').annotate(
+        Count('uuid')).exclude(apresentou_reclamacao=None)
+    label = [d['apresentou_reclamacao'] for d in apresentou_reclamacao]
+    datas = [d['uuid__count'] for d in apresentou_reclamacao]
+    for x in label:
+        labels.append(x)
+    for y in datas:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_canal_usado(request):
+    labels = []
+    data = []
+    canal_usado = Inquerito.objects.values('canal_que_usou').annotate(
+        Count('uuid')).exclude(canal_que_usou=None)
+    u_label = [d['canal_que_usou'] for d in canal_usado]
+    u_data = [d['uuid__count'] for d in canal_usado]
+    for x in u_label:
+        labels.append(x)
+    for y in u_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_tempo_gasto_resolver(request):
+    labels = []
+    data = []
+    tempo_gasto = Inquerito.objects.values('tempo_gasto_resolver').annotate(
+        Count('uuid')).exclude(tempo_gasto_resolver=None)
+    t_label = [d['tempo_gasto_resolver'] for d in tempo_gasto]
+    t_data = [d['uuid__count'] for d in tempo_gasto]
+    for x in t_label:
+        labels.append(x)
+    for y in t_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_ficou_satisfeito(request):
+    labels = []
+    data = []
+    satisfeito = Inquerito.objects.values('ficou_satisfeito').annotate(
+        Count('uuid')).exclude(ficou_satisfeito=None)
+    s_label = [d['ficou_satisfeito'] for d in satisfeito]
+    s_data = [d['uuid__count'] for d in satisfeito]
+    for x in s_label:
+        labels.append(x)
+    for y in s_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_ja_ouviu_vbg(request):
+    labels = []
+    data = []
+    vbg = Inquerito.objects.values('ouviu_falar_vbg').annotate(
+        Count('uuid')).exclude(ouviu_falar_vbg=None)
+    v_label = [d['ouviu_falar_vbg'] for d in vbg]
+    v_data = [d['uuid__count'] for d in vbg]
+    for x in v_label:
+        labels.append(x)
+    for y in v_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_vitima_vbg(request):
+    labels = []
+    data = []
+    vitima = Inquerito.objects.values('ja_foi_vitima_vbg').annotate(
+        Count('uuid')).exclude(ja_foi_vitima_vbg=None)
+    v_label = [d['ja_foi_vitima_vbg'] for d in vitima]
+    v_data = [d['uuid__count'] for d in vitima]
+    for x in v_label:
+        labels.append(x)
+    for y in v_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_canais_denunciar(request):
+    labels = []
+    data = []
+    denunciar = Inquerito.objects.values('canais_denunciar_vbg').annotate(
+        Count('uuid')).exclude(canais_denunciar_vbg=None)
+    d_label = [d['canais_denunciar_vbg'] for d in denunciar]
+    d_data = [d['uuid__count'] for d in denunciar]
+    for x in d_label:
+        labels.append(x)
+    for y in d_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_teve_toda_assistencia(request):
+    labels = []
+    data = []
+    assistencia = Inquerito.objects.values('teve_toda_assistencia').annotate(
+        Count('uuid')).exclude(teve_toda_assistencia=None)
+    a_label = [d['teve_toda_assistencia'] for d in assistencia]
+    a_data = [d['uuid__count'] for d in assistencia]
+    for x in a_label:
+        labels.append(x)
+    for y in a_data:
+        data.append(y)
+
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
+def relatorio_tipo_vbg(request):
+    labels = []
+    data = []
+    tipo_vbg = Inquerito.objects.values('casos_vbg_ouviu_falar').annotate(
+        Count('uuid')).exclude(casos_vbg_ouviu_falar=None)
+    v_label = [d['casos_vbg_ouviu_falar'] for d in tipo_vbg]
+    v_data = [d['uuid__count'] for d in tipo_vbg]
+    for x in v_label:
+        labels.append(x)
+    for y in v_data:
+        data.append(y)
+    json_data = {'data': data, 'labels': labels}
+    return JsonResponse(json_data)
+
+
 @login_required(login_url="login")
 def index(request):
     machamba_label = []
