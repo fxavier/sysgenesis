@@ -910,13 +910,13 @@ function renderiza_tempo_gasto_resolver(url) {
     }).then(function (result) {
         return result.json();
     }).then(function (data) {
-        const ctx = document.getElementById('canal_usado').getContext('2d');
+        const ctx = document.getElementById('tempo_gasto').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: data.labels,
                 datasets: [{
-                    label: 'Quanto tempo levou para resolver?:',
+                    label: '% do tempo gasto para resolver:',
                     data: data.data,
                     backgroundColor: [
                         'rgba(255, 99, 132, 1)',

@@ -15,6 +15,8 @@ service_account = gspread.service_account(filename="credentials.json")
 sh = service_account.open('Inquerito_resultados')
 wks = sh.worksheet('Folha1')
 
+genero_count = Inquerito.objects.all().count()
+
 
 def get_data_from_spreadsheet(worksheet: str, sheet: str):
     sh = service_account.open(worksheet)
@@ -435,7 +437,8 @@ def relatorio_tamanho_machamba(request):
     tamanho_machamba = Inquerito.objects.values('tamanho_machamba').annotate(
         Count('uuid')).exclude(tamanho_machamba=None)
     ta_labels = [d['tamanho_machamba'] for d in tamanho_machamba]
-    ta_data = [d['uuid__count'] for d in tamanho_machamba]
+    ta_data = [float('{:.2f}'.format(d['uuid__count'] / genero_count * 100))
+               for d in tamanho_machamba]
     for x in ta_labels:
         labels.append(x)
     for y in ta_data:
@@ -450,7 +453,8 @@ def relatorio_local_machamba(request):
     local_machamba = Inquerito.objects.values('local_machamba').annotate(
         Count('uuid')).exclude(local_machamba=None)
     l_labels = [d['local_machamba'] for d in local_machamba]
-    l_data = [d['uuid__count'] for d in local_machamba]
+    l_data = [float('{:.2f}'.format(d['uuid__count'] / genero_count * 100))
+              for d in local_machamba]
     for x in l_labels:
         labels.append(x)
     for y in l_data:
@@ -480,7 +484,8 @@ def relatorio_cor_solo(request):
     cor_solo = Inquerito.objects.values('cor_solo').annotate(
         Count('uuid')).exclude(cor_solo=None)
     cs_label = [d['cor_solo'] for d in cor_solo]
-    cs_data = [d['uuid__count'] for d in cor_solo]
+    cs_data = [float('{:.2f}'.format(d['uuid__count'] /
+                     genero_count * 100)) for d in cor_solo]
     for x in cs_label:
         labels.append(x)
     for y in cs_data:
@@ -510,7 +515,8 @@ def relatorio_recebeu_semente(request):
     recebeu_semente = Inquerito.objects.values('recebeu_semente').annotate(
         Count('uuid')).exclude(recebeu_semente=None)
     s_label = [d['recebeu_semente'] for d in recebeu_semente]
-    s_data = [d['uuid__count'] for d in recebeu_semente]
+    s_data = [float('{:.2f}'.format(d['uuid__count'] / genero_count * 100))
+              for d in recebeu_semente]
     for x in s_label:
         labels.append(x)
     for y in s_data:
@@ -552,11 +558,15 @@ def relatorio_tipo_kit(request):
 def relatorio_de_quem_recebeu_semente(request):
     labels = []
     data = []
+    recebeu_count = Inquerito.objects.filter(recebeu_semente='Sim').count()
     de_quem_recebeu_semente = Inquerito.objects.values('de_quem_recebeu_semente').annotate(
         Count('uuid')).exclude(de_quem_recebeu_semente=None)
     d_label = [d['de_quem_recebeu_semente'] for d in de_quem_recebeu_semente]
-    d_data = [d['uuid__count'] for d in de_quem_recebeu_semente]
+    d_data = [float('{:.2f}'.format(d['uuid__count'] / recebeu_count * 100))
+              for d in de_quem_recebeu_semente]
     for x in d_label:
+        # if x == None:
+        #     x = 'Outro'
         labels.append(x)
     for y in d_data:
         data.append(y)
@@ -570,7 +580,8 @@ def relatorio_tipo_familia(request):
     tipo_familia = Inquerito.objects.values('tipo_familia').annotate(
         Count('uuid')).exclude(tipo_familia=None)
     k_label = [d['tipo_familia'] for d in tipo_familia]
-    k_data = [d['uuid__count'] for d in tipo_familia]
+    k_data = [float('{:.2f}'.format(d['uuid__count'] / genero_count * 100))
+              for d in tipo_familia]
     for x in k_label:
         labels.append(x)
     for y in k_data:
@@ -582,10 +593,12 @@ def relatorio_tipo_familia(request):
 def relatorio_genero(request):
     labels = []
     data = []
+
     genero = Inquerito.objects.values('genero').annotate(
         Count('uuid')).exclude(genero=None)
     g_label = [d['genero'] for d in genero]
-    g_data = [d['uuid__count'] for d in genero]
+    g_data = [float('{:.2f}'.format(d['uuid__count'] / genero_count * 100))
+              for d in genero]
     for x in g_label:
         labels.append(x)
     for y in g_data:
@@ -628,11 +641,13 @@ def relatorio_comunidade(request):
 def relatorio_quando_realizou_sementeira(request):
     labels = []
     data = []
+    recebeu_count = Inquerito.objects.filter(recebeu_semente='Sim').count()
     quando_realizou_sementeira = Inquerito.objects.values('quando_realizou_sementeira').annotate(
         Count('uuid')).exclude(quando_realizou_sementeira=None)
     s_label = [d['quando_realizou_sementeira']
                for d in quando_realizou_sementeira]
-    s_data = [d['uuid__count'] for d in quando_realizou_sementeira]
+    s_data = [float('{:.2f}'.format(d['uuid__count'] / recebeu_count * 100))
+              for d in quando_realizou_sementeira]
     for x in s_label:
         labels.append(x)
     for y in s_data:
@@ -659,6 +674,7 @@ def relatorio_sementes_germinou(request):
 def relatorio_canais_reclamacao(request):
     labels = []
     data = []
+
     canais_reclamacao = Inquerito.objects.values('canais_apresentar_reclamacao').annotate(
         Count('uuid')).exclude(canais_apresentar_reclamacao=None)
     r_labels = [d['canais_apresentar_reclamacao'] for d in canais_reclamacao]
@@ -692,7 +708,8 @@ def relatorio_apresentou_reclamacao(request):
     apresentou_reclamacao = Inquerito.objects.values('apresentou_reclamacao').annotate(
         Count('uuid')).exclude(apresentou_reclamacao=None)
     label = [d['apresentou_reclamacao'] for d in apresentou_reclamacao]
-    datas = [d['uuid__count'] for d in apresentou_reclamacao]
+    datas = [float('{:.2f}'.format(d['uuid__count'] / genero_count * 100))
+             for d in apresentou_reclamacao]
     for x in label:
         labels.append(x)
     for y in datas:
@@ -704,10 +721,13 @@ def relatorio_apresentou_reclamacao(request):
 def relatorio_canal_usado(request):
     labels = []
     data = []
+    apresentou_count = Inquerito.objects.filter(
+        apresentou_reclamacao='Sim').count()
     canal_usado = Inquerito.objects.values('canal_que_usou').annotate(
         Count('uuid')).exclude(canal_que_usou=None)
     u_label = [d['canal_que_usou'] for d in canal_usado]
-    u_data = [d['uuid__count'] for d in canal_usado]
+    u_data = [float('{:.2f}'.format(d['uuid__count'] / apresentou_count * 100))
+              for d in canal_usado]
     for x in u_label:
         labels.append(x)
     for y in u_data:
@@ -719,10 +739,13 @@ def relatorio_canal_usado(request):
 def relatorio_tempo_gasto_resolver(request):
     labels = []
     data = []
+    apresentou_count = Inquerito.objects.filter(
+        apresentou_reclamacao='Sim').count()
     tempo_gasto = Inquerito.objects.values('tempo_gasto_resolver').annotate(
         Count('uuid')).exclude(tempo_gasto_resolver=None)
     t_label = [d['tempo_gasto_resolver'] for d in tempo_gasto]
-    t_data = [d['uuid__count'] for d in tempo_gasto]
+    t_data = [float('{:.2f}'.format(d['uuid__count'] / apresentou_count * 100))
+              for d in tempo_gasto]
     for x in t_label:
         labels.append(x)
     for y in t_data:
@@ -734,10 +757,13 @@ def relatorio_tempo_gasto_resolver(request):
 def relatorio_ficou_satisfeito(request):
     labels = []
     data = []
+    apresentou_count = Inquerito.objects.filter(
+        apresentou_reclamacao='Sim').count()
     satisfeito = Inquerito.objects.values('ficou_satisfeito').annotate(
         Count('uuid')).exclude(ficou_satisfeito=None)
     s_label = [d['ficou_satisfeito'] for d in satisfeito]
-    s_data = [d['uuid__count'] for d in satisfeito]
+    s_data = [float('{:.2f}'.format(d['uuid__count'] / apresentou_count * 100))
+              for d in satisfeito]
     for x in s_label:
         labels.append(x)
     for y in s_data:
@@ -752,7 +778,8 @@ def relatorio_ja_ouviu_vbg(request):
     vbg = Inquerito.objects.values('ouviu_falar_vbg').annotate(
         Count('uuid')).exclude(ouviu_falar_vbg=None)
     v_label = [d['ouviu_falar_vbg'] for d in vbg]
-    v_data = [d['uuid__count'] for d in vbg]
+    v_data = [float('{:.2f}'.format(d['uuid__count'] /
+                    genero_count * 100)) for d in vbg]
     for x in v_label:
         labels.append(x)
     for y in v_data:
@@ -764,10 +791,12 @@ def relatorio_ja_ouviu_vbg(request):
 def relatorio_vitima_vbg(request):
     labels = []
     data = []
+    ouviu_count = Inquerito.objects.filter(ouviu_falar_vbg='Sim').count()
     vitima = Inquerito.objects.values('ja_foi_vitima_vbg').annotate(
         Count('uuid')).exclude(ja_foi_vitima_vbg=None)
     v_label = [d['ja_foi_vitima_vbg'] for d in vitima]
-    v_data = [d['uuid__count'] for d in vitima]
+    v_data = [float('{:.2f}'.format(d['uuid__count'] /
+                    ouviu_count * 100)) for d in vitima]
     for x in v_label:
         labels.append(x)
     for y in v_data:
@@ -797,7 +826,8 @@ def relatorio_teve_toda_assistencia(request):
     assistencia = Inquerito.objects.values('teve_toda_assistencia').annotate(
         Count('uuid')).exclude(teve_toda_assistencia=None)
     a_label = [d['teve_toda_assistencia'] for d in assistencia]
-    a_data = [d['uuid__count'] for d in assistencia]
+    a_data = [float('{:.2f}'.format(d['uuid__count'] / genero_count * 100))
+              for d in assistencia]
     for x in a_label:
         labels.append(x)
     for y in a_data:
