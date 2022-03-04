@@ -156,8 +156,8 @@ def refresh_inquerito_data():
                 str(data.get("data-germinacao_semente_uso_fertilizante-sementes_germinaram"))),
             foto_sementes_germinou_url=Constants().get_dicionario().get(str(
                 data.get("data-germinacao_semente_uso_fertilizante-foto_semente_germinaram"))),
-            semente_nao_germinou=Constants().get_dicionario().get(str(
-                data.get("data-germinacao_semente_uso_fertilizante-sementes_nao_germinaram"))),
+            semente_nao_germinou=data.get(
+                "data-germinacao_semente_uso_fertilizante-sementes_nao_germinaram"),
             usou_fertilizante=Constants().get_dicionario().get(
                 str(data.get("data-germinacao_semente_uso_fertilizante-usou_fertilizante"))),
             tipo_fertilizante=Constants().get_dicionario().get(
@@ -198,12 +198,11 @@ def refresh_inquerito_data():
                 str(data.get("data-treinamento-familia_nao_recebeu_treinamento"))),
             nome_familia_nao_recebeu=data.get(
                 "data-treinamento-nome_familia_nao_recebeu_treinamento"),
-            canais_apresentar_reclamacao=Constants().get_dicionario().get(
-                str(data.get("data-reclamacoes-canais_apresentar_reclamacoes"))),
+            canais_apresentar_reclamacao=data.get(
+                "data-reclamacoes-canais_apresentar_reclamacoes"),
             apresentou_reclamacao=Constants().get_dicionario().get(
                 str(data.get("data-reclamacoes-apresentou_reclamacao"))),
-            canal_que_usou=Constants().get_dicionario().get(
-                str(data.get("data-reclamacoes-canal_que_usou"))),
+            canal_que_usou=data.get("data-reclamacoes-canal_que_usou"),
             outro_canal=data.get("data-reclamacoes-outro_canal"),
             tempo_gasto_resolver=Constants().get_dicionario().get(
                 str(data.get("data-reclamacoes-tempo_gasto_resolver"))),
@@ -213,15 +212,13 @@ def refresh_inquerito_data():
                 str(data.get("data-vbg-ouviu_falar_vbg"))),
             ja_foi_vitima_vbg=Constants().get_dicionario().get(
                 str(data.get("data-vbg-ja_foi_vitima_vbg"))),
-            canais_denunciar_vbg=Constants().get_dicionario().get(
-                str(data.get("data-vbg-canais_denunciar_vbg"))),
+            canais_denunciar_vbg=data.get("data-vbg-canais_denunciar_vbg"),
             outro_canal_denuncia=data.get("data-vbg-outro_canal_denuncia"),
             teve_toda_assistencia=Constants().get_dicionario().get(
                 str(data.get("data-vbg-teve_toda_assistencia"))),
             e_comum_vbg_comunidade=Constants().get_dicionario().get(
                 str(data.get("data-vbg-e_comum_vbg_comunidade"))),
-            casos_vbg_ouviu_falar=Constants().get_dicionario().get(
-                str(data.get("data-vbg-casos_vbg_ouviu_falar"))),
+            casos_vbg_ouviu_falar=data.get("data-vbg-casos_vbg_ouviu_falar"),
             outro_caso_vbg_ouviu_falar=data.get(
                 "data-vbg-outro_caso_vbg_ouviu_falar"),
             foto_caso_vbg_url=data.get("data-vbg-foto_caso_vbg")

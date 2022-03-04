@@ -8,7 +8,7 @@ from dashboard.models import Inquerito, TipoSementeGerminou, TipoAreaGerminacao,
 class InqueritoAdmin(ImportExportMixin, admin.ModelAdmin):
     ordering = ["nome_agg_familiar", ]
     list_display = ["numero_questionario", "codigo_familia", "nome_agg_familiar",
-                    "local_entrevista", "nome_inquiridor", "tipo_documento", "forma_aquisicao"]
+                    "local_entrevista", "nome_inquiridor", "canais_apresentar_reclamacao"]
 
 
 class VerificacaoSementesAdmin(ImportExportMixin, admin.ModelAdmin):
