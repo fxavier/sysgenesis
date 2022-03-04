@@ -11,6 +11,7 @@ class Constants:
         "cartao_eleitor": "Cartao de eleitor",
         "certidao_nascimento": "Certidao de Nascimento",
         "cedula": "Cedula Pessoal",
+        "cartao_assistencia_tecnica": "Cartão de Assistência Técnica",
         "nao_tem": "Nao tem Documento",
         "outro": "Outro",
         "masculino": "Masculino",
