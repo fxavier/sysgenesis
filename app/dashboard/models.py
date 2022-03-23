@@ -263,7 +263,7 @@ class TipoSementeGerminou(models.Model):
     uuid = models.CharField(max_length=255, null=True, blank=True)
     nome_semente = models.CharField(max_length=100, null=True, blank=True)
     tempo_germinacao = models.CharField(max_length=100, null=True, blank=True)
-    sementeira = models.ForeignKey(Sementeira, on_delete=models.CASCADE)
+    sementeira = models.ForeignKey(Sementeira, on_delete=models.CASCADE, null=True, blank=True)
    # parent_key = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
@@ -275,7 +275,7 @@ class TipoAreaGerminacao(models.Model):
     nome_semente = models.CharField(max_length=100, null=True, blank=True)
     area = models.CharField(max_length=100, null=True, blank=True)
     # parent_key = models.CharField(max_length=255, null=True, blank=True)
-    sementeira = models.ForeignKey(Sementeira, on_delete=models.CASCADE)
+    sementeira = models.ForeignKey(Sementeira, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.uuid
