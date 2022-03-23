@@ -6,14 +6,17 @@ import gspread
 
 from django.contrib.auth.decorators import login_required
 
-from dashboard.models import Inquerito, TipoSementeGerminou, TipoAreaGerminacao, VerificacaoSementes
+from dashboard.models import Inquerito, TipoSementeGerminou, TipoAreaGerminacao, VerificacaoSementes, Sementeira
 from dashboard.helpers import Helpers
 
 from dashboard.constants import Constants
 
 service_account = gspread.service_account(filename="credentials.json")
-sh = service_account.open('Inquerito_resultados')
-wks = sh.worksheet('Folha1')
+# sh = service_account.open('Inqueritos')
+# wks = sh.worksheet('Sheet1')
+
+# sh1 = service_account.open('Inqueritos_resultados')
+# wks1 = sh.worksheet('Folha1')
 
 genero_count = Inquerito.objects.all().count()
 
@@ -26,7 +29,7 @@ def get_data_from_spreadsheet(worksheet: str, sheet: str):
 
 def refresh_inquerito_data():
     Inquerito.objects.all().delete()
-    questionario = 1
+    questionario = 966
     for data in get_data_from_spreadsheet("Inquerito_resultados", "Folha1"):
         inquerito = Inquerito.objects.create(
             uuid=data.get("KEY"),
@@ -226,28 +229,152 @@ def refresh_inquerito_data():
         )
         questionario += 1
         inquerito.save()
+        
+        
+        
+def refresh_sementeira_data():
+    Sementeira.objects.all().delete()
+    questionario = 966
+    for data in get_data_from_spreadsheet("Inqueritos", "Sheet1"):
+        sementeira = Sementeira.objects.create(
+            uuid=data.get("KEY"),
+            codigo_familia=data.get("data-dados_iniciais-codigo_familia"),
+            data_inquerito=data.get("data-dados_iniciais-data_inquerito"),
+            nome_inquiridor=data.get("data-dados_iniciais-nome_inquiridor"),
+            numero_questionario=questionario,
+            local_entrevista=data.get("data-dados_iniciais-local_entrevista"),
+            gps_local_lat_long=data.get(
+                "data-dados_iniciais-gps_local_entrevista"),
+            gps_local_accuracy=data.get(
+                "data-dados_iniciais-gps_local_entrevista-accuracy"),
+            tipo_beneficiario=Constants().get_dicionario().get(
+                str(data.get("data-identificacao_receptor-tipo_beneficiario"))),
+            tipo_familia=Constants().get_dicionario().get(
+                str(data.get("data-identificacao_receptor-tipo_familia"))),
+            nome_agg_familiar=data.get(
+                "data-identificacao_receptor-nome_agg_familiar"),
+            tipo_documento=Constants().get_dicionario().get(
+                str(data.get("data-identificacao_receptor-tipo_doc"))),
+            documento=data.get("data-identificacao_receptor-documento"),
+            photo_doc_url=data.get("data-identificacao_receptor-photo_doc"),
+            data_nascimento=Helpers.formatDate(data.get(
+                "data-identificacao_receptor-data_nascimento")),
+            genero=Constants().get_dicionario().get(
+                str(data.get("data-identificacao_receptor-genero"))),
+            outro_genero=data.get("data-identificacao_receptor-outro_genero"),
+            contacto=data.get("data-identificacao_receptor-contacto"),
+            parte_bd=Constants().get_dicionario().get(
+                str(data.get("data-identificacao_receptor-part_bd"))),
+            criterios_elegib_agg_familiar=Constants().get_dicionario().get(
+                str(data.get("data-identificacao_receptor-criterios_eleg_agg_familiar"))),
+            provincia=Constants().get_dicionario().get(
+                str(data.get("data-localizacao_agregado-provincia"))),
+            distrito=Constants().get_dicionario().get(
+                str(data.get("data-localizacao_agregado-distrito"))),
+            posto_administrativo=Constants().get_dicionario().get(
+                str(data.get("data-localizacao_agregado-posto_administrativo"))),
+            localidade=Constants().get_dicionario().get(
+                str(data.get("data-localizacao_agregado-localidade"))),
+            comunidade=Constants().get_dicionario().get(
+                str(data.get("data-localizacao_agregado-comunidade"))),
+            sementes_germinou=Constants().get_dicionario().get(
+                str(data.get("data-germinacao_semente_uso_fertilizante-sementes_germinaram"))),
+            foto_sementes_germinou_url=Constants().get_dicionario().get(str(
+                data.get("data-germinacao_semente_uso_fertilizante-foto_semente_germinaram"))),
+            semente_nao_germinou=data.get(
+                "data-germinacao_semente_uso_fertilizante-sementes_nao_germinaram"),
+            usou_fertilizante=Constants().get_dicionario().get(
+                str(data.get("data-germinacao_semente_uso_fertilizante-usou_fertilizante"))),
+            tipo_fertilizante=Constants().get_dicionario().get(
+                str(data.get("data-germinacao_semente_uso_fertilizante-tipo_fertilizante"))),
+            outro_tipo_fertilizante=data.get(
+                "data-germinacao_semente_uso_fertilizante-outro_tipo_fertilizante"),
+            momento_usou_adubo=Constants().get_dicionario().get(
+                str(data.get("data-germinacao_semente_uso_fertilizante-momento_usou_adubo"))),
+            outro_momento_usou_adubo=data.get(
+                "data-germinacao_semente_uso_fertilizante-outro_momento_usou_adubo"),
+            adubo_usado=Constants().get_dicionario().get(
+                str(data.get("data-germinacao_semente_uso_fertilizante-adubo_usado"))),
+            recebeu_treinamento=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-recebeu_treinamento"))),
+            lugar_treinamento=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-lugar_treinamento"))),
+            outro_lugar_treinamento=data.get(
+                "data-treinamento-outro_lugar_treinamento"),
+            de_quem_recebeu_treinamento=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-de_quem_recebeu_treinamento"))),
+            outro_de_quem_recebeu_treinamento=data.get(
+                "data-treinamento-outro_de_quem_recebeu_treinamento"),
+            quando_recebeu_treinamento=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-quando_recebeu_treinamento"))),
+            outro_quando_recebeu_treinamento=data.get(
+                "data-treinamento-outro_quando_recebeu_treinamento"),
+            tipo_treinamento=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-recebeu_tipo_treinamento"))),
+            recebeu_visita_assistencia=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-recebeu_visita_assistencia"))),
+            de_quem_recebeu_visita_assistencia=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-de_quem_recebeu_visita"))),
+            outro_de_quem_recebeu_visita_assistencia=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-outro_de_quem_recebeu_visita"))),
+            momento_recebeu_visita=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-momento_recebeu_visita"))),
+            familia_nao_recebeu_treinamento=Constants().get_dicionario().get(
+                str(data.get("data-treinamento-familia_nao_recebeu_treinamento"))),
+            nome_familia_nao_recebeu=data.get(
+                "data-treinamento-nome_familia_nao_recebeu_treinamento"),
+            canais_apresentar_reclamacao=data.get(
+                "data-reclamacoes-canais_apresentar_reclamacoes"),
+            apresentou_reclamacao=Constants().get_dicionario().get(
+                str(data.get("data-reclamacoes-apresentou_reclamacao"))),
+            canal_que_usou=data.get("data-reclamacoes-canal_que_usou"),
+            outro_canal=data.get("data-reclamacoes-outro_canal"),
+            tempo_gasto_resolver=Constants().get_dicionario().get(
+                str(data.get("data-reclamacoes-tempo_gasto_resolver"))),
+            ficou_satisfeito=Constants().get_dicionario().get(
+                str(data.get("data-reclamacoes-ficou_satisfeito_solucao"))),
+            ouviu_falar_vbg=Constants().get_dicionario().get(
+                str(data.get("data-vbg-ouviu_falar_vbg"))),
+            ja_foi_vitima_vbg=Constants().get_dicionario().get(
+                str(data.get("data-vbg-ja_foi_vitima_vbg"))),
+            canais_denunciar_vbg=data.get("data-vbg-canais_denunciar_vbg"),
+            outro_canal_denuncia=data.get("data-vbg-outro_canal_denuncia"),
+            teve_toda_assistencia=Constants().get_dicionario().get(
+                str(data.get("data-vbg-teve_toda_assistencia"))),
+            e_comum_vbg_comunidade=Constants().get_dicionario().get(
+                str(data.get("data-vbg-e_comum_vbg_comunidade"))),
+            casos_vbg_ouviu_falar=data.get("data-vbg-casos_vbg_ouviu_falar"),
+            outro_caso_vbg_ouviu_falar=data.get(
+                "data-vbg-outro_caso_vbg_ouviu_falar"),
+            foto_caso_vbg_url=data.get("data-vbg-foto_caso_vbg")
+
+        )
+        questionario += 1
+        sementeira.save()
 
     TipoSementeGerminou.objects.all().delete()
-    for data in get_data_from_spreadsheet("Inquerito_resultados", "data-germinacao_semente_uso_fertilizante-germinacao_semente_repeat"):
+    for data in get_data_from_spreadsheet("Inqueritos", "data-germinacao_semente_uso_fertilizante-germinacao_semente_repeat"):
         tipo_semente_germinou = TipoSementeGerminou.objects.create(
             uuid=data.get("KEY"),
             nome_semente=Constants().get_dicionario().get(str(data.get(
                 "data-germinacao_semente_uso_fertilizante-germinacao_semente_repeat-tipo_semente_germinou"))),
             tempo_germinacao=Constants().get_dicionario().get(str(data.get(
                 "data-germinacao_semente_uso_fertilizante-germinacao_semente_repeat-tempo_germinacao"))),
-            parent_key=data.get("PARENT_KEY")
+           sementeira=sementeira
         )
 
         tipo_semente_germinou.save()
+        
+        
     TipoAreaGerminacao.objects.all().delete()
-    for data in get_data_from_spreadsheet("Inquerito_resultados", "data-germinacao_semente_uso_fertilizante-tipo_area_de_germinacao"):
+    for data in get_data_from_spreadsheet("Inqueritos", "data-germinacao_semente_uso_fertilizante-tipo_area_de_germinacao"):
         tipo_area_de_germinacao = TipoAreaGerminacao.objects.create(
             uuid=data.get("KEY"),
             nome_semente=Constants().get_dicionario().get(str(data.get(
                 "data-germinacao_semente_uso_fertilizante-tipo_area_de_germinacao-tipo_semente_germinou_area"))),
             area=Constants().get_dicionario().get(str(data.get(
                 "data-germinacao_semente_uso_fertilizante-tipo_area_de_germinacao-tamanho_area_germinou"))),
-            parent_key=data.get("PARENT_KEY")
+            sementeira=sementeira
         )
 
         tipo_area_de_germinacao.save()
@@ -333,7 +460,8 @@ def refresh_verificacao_semente_data():
 
 @login_required(login_url="users:login")
 def push_data(request):
-    refresh_inquerito_data()
+    #refresh_inquerito_data()
+    refresh_sementeira_data()
     # return HttpResponse("Data added")
     return render(request, 'dashboard/home.html')
 

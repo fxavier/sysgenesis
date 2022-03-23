@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block 'title' %}Sementeira{% endblock 'title' %}
+{% block 'head' %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock 'head' %}
+{% block 'content' %}
+<div class="container">
+    <br>
+    <div class="row">
+
+        <div class="col-md informacoes_basicas">
+            <h5>Total Inqueritos: {{inquerito_count}} </h5>
+
+        </div>
+
+        <div class="col-md informacoes_basicas">
+            <div class="col-md informacoes_basicas">
+                <h5>Nampula: {{inquerito_nampula}} </h5>
+
+            </div>
+        </div>
+
+        <div class="col-md informacoes_basicas">
+            <div class="col-md informacoes_basicas">
+                <h5>Cabo Delgado: {{inquerito_cabo_delgado}} </h5>
+
+            </div>
+        </div>
+
+    </div>
+
+    {% endblock 'content' %}

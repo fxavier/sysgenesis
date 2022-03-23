@@ -162,26 +162,123 @@ class Inquerito(models.Model):
         return reverse('core:inquerito')
 
 
+class Sementeira(models.Model):
+    uuid = models.CharField(max_length=255, primary_key=True)
+    codigo_familia = models.CharField(max_length=255)
+    data_inquerito = models.DateField()
+    nome_inquiridor = models.CharField(max_length=255)
+    numero_questionario = models.IntegerField(default=0)
+    local_entrevista = models.CharField(max_length=255)
+    gps_local_lat_long = models.CharField(max_length=255)
+    gps_local_accuracy = models.DecimalField(max_digits=10, decimal_places=2)
+    tipo_beneficiario = models.CharField(max_length=255)
+    tipo_familia = models.CharField(max_length=255)
+    nome_agg_familiar = models.CharField(max_length=255)
+    tipo_documento = models.CharField(max_length=255)
+    documento = models.CharField(max_length=255)
+    photo_doc_url = models.CharField(max_length=255, null=True, blank=True)
+    data_nascimento = models.DateField()
+    genero = models.CharField(max_length=255)
+    outro_genero = models.CharField(max_length=255)
+    contacto = models.CharField(max_length=255)
+    parte_bd = models.CharField(max_length=20)
+    criterios_elegib_agg_familiar = models.CharField(max_length=255)
+    provincia = models.CharField(max_length=255, null=True, blank=True)
+    distrito = models.CharField(max_length=255, null=True, blank=True)
+    posto_administrativo = models.CharField(
+        max_length=255, null=True, blank=True)
+    localidade = models.CharField(max_length=255, null=True, blank=True)
+    comunidade = models.CharField(max_length=255, null=True, blank=True)
+    sementes_germinou = models.CharField(max_length=255, null=True, blank=True)
+    foto_sementes_germinou_url = models.CharField(
+        max_length=255, null=True, blank=True)
+    semente_nao_germinou = models.CharField(
+        max_length=255, null=True, blank=True)
+    usou_fertilizante = models.CharField(max_length=255, null=True, blank=True)
+    tipo_fertilizante = models.CharField(max_length=255, null=True, blank=True)
+    outro_tipo_fertilizante = models.CharField(
+        max_length=255, null=True, blank=True)
+    momento_usou_adubo = models.CharField(
+        max_length=255, null=True, blank=True)
+    outro_momento_usou_adubo = models.CharField(
+        max_length=255, null=True, blank=True)
+    adubo_usado = models.CharField(max_length=255, null=True, blank=True)
+    recebeu_treinamento = models.CharField(
+        max_length=255, null=True, blank=True)
+    lugar_treinamento = models.CharField(max_length=255, null=True, blank=True)
+    outro_lugar_treinamento = models.CharField(
+        max_length=255, null=True, blank=True)
+    de_quem_recebeu_treinamento = models.CharField(
+        max_length=255, null=True, blank=True)
+    outro_de_quem_recebeu_treinamento = models.CharField(
+        max_length=255, null=True, blank=True)
+    quando_recebeu_treinamento = models.CharField(
+        max_length=255, null=True, blank=True)
+    outro_quando_recebeu_treinamento = models.CharField(
+        max_length=255, null=True, blank=True)
+    tipo_treinamento = models.CharField(max_length=255, null=True, blank=True)
+    recebeu_visita_assistencia = models.CharField(
+        max_length=255, null=True, blank=True)
+    de_quem_recebeu_visita_assistencia = models.CharField(
+        max_length=255, null=True, blank=True)
+    outro_de_quem_recebeu_visita_assistencia = models.CharField(
+        max_length=255, null=True, blank=True)
+    momento_recebeu_visita = models.CharField(
+        max_length=255, null=True, blank=True)
+    familia_nao_recebeu_treinamento = models.CharField(
+        max_length=255, null=True, blank=True)
+    nome_familia_nao_recebeu = models.CharField(
+        max_length=255, null=True, blank=True)
+    canais_apresentar_reclamacao = models.CharField(
+        max_length=255, null=True, blank=True)
+    apresentou_reclamacao = models.CharField(
+        max_length=255, null=True, blank=True)
+    canal_que_usou = models.CharField(max_length=255, null=True, blank=True)
+    outro_canal = models.CharField(max_length=255, null=True, blank=True)
+    tempo_gasto_resolver = models.CharField(
+        max_length=255, null=True, blank=True)
+    ficou_satisfeito = models.CharField(max_length=255, null=True, blank=True)
+    ouviu_falar_vbg = models.CharField(max_length=255, null=True, blank=True)
+    ja_foi_vitima_vbg = models.CharField(max_length=255, null=True, blank=True)
+    canais_denunciar_vbg = models.CharField(
+        max_length=255, null=True, blank=True)
+    outro_canal_denuncia = models.CharField(
+        max_length=255, null=True, blank=True)
+    teve_toda_assistencia = models.CharField(
+        max_length=255, null=True, blank=True)
+    e_comum_vbg_comunidade = models.CharField(
+        max_length=255, null=True, blank=True)
+    casos_vbg_ouviu_falar = models.CharField(
+        max_length=255, null=True, blank=True)
+    outro_caso_vbg_ouviu_falar = models.CharField(
+        max_length=255, null=True, blank=True)
+    foto_caso_vbg_url = models.CharField(max_length=255, null=True, blank=True)
+    comentario_geral = models.CharField(max_length=500, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.codigo_familia}-{self.data_inquerito}'
+
+
 class TipoSementeGerminou(models.Model):
     uuid = models.CharField(max_length=255, null=True, blank=True)
     nome_semente = models.CharField(max_length=100, null=True, blank=True)
     tempo_germinacao = models.CharField(max_length=100, null=True, blank=True)
-    parent_key = models.CharField(max_length=255, null=True, blank=True)
+    sementeira = models.ForeignKey(Sementeira, on_delete=models.CASCADE)
+   # parent_key = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.uuid
+        return f'{self.codigo_familia}-{self.data_inquerito}'
 
 
 class TipoAreaGerminacao(models.Model):
     uuid = models.CharField(max_length=255, null=True, blank=True)
     nome_semente = models.CharField(max_length=100, null=True, blank=True)
     area = models.CharField(max_length=100, null=True, blank=True)
-    parent_key = models.CharField(max_length=255, null=True, blank=True)
+    # parent_key = models.CharField(max_length=255, null=True, blank=True)
+    sementeira = models.ForeignKey(Sementeira, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.uuid
-
-
 class VerificacaoSementes(models.Model):
     data = models.DateField()
     horas = models.TimeField()
