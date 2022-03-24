@@ -18,7 +18,7 @@ service_account = gspread.service_account(filename="credentials.json")
 # sh1 = service_account.open('Inqueritos_resultados')
 # wks1 = sh.worksheet('Folha1')
 
-genero_count = Inquerito.objects.all().count()
+genero_count = Inquerito.objects.all().count() + Sementeira.objects.all().count()
 
 
 def get_data_from_spreadsheet(worksheet: str, sheet: str):
@@ -279,8 +279,7 @@ def refresh_sementeira_data():
                 str(data.get("data-localizacao_agregado-comunidade"))),
             sementes_germinou=Constants().get_dicionario().get(
                 str(data.get("data-germinacao_semente_uso_fertilizante-sementes_germinaram"))),
-            foto_sementes_germinou_url=Constants().get_dicionario().get(str(
-                data.get("data-germinacao_semente_uso_fertilizante-foto_semente_germinaram"))),
+            foto_sementes_germinou_url=data.get("data-germinacao_semente_uso_fertilizante-foto_semente_germinaram"),
             semente_nao_germinou=data.get(
                 "data-germinacao_semente_uso_fertilizante-sementes_nao_germinaram"),
             usou_fertilizante=Constants().get_dicionario().get(
@@ -289,14 +288,11 @@ def refresh_sementeira_data():
                 str(data.get("data-germinacao_semente_uso_fertilizante-tipo_fertilizante"))),
             outro_tipo_fertilizante=data.get(
                 "data-germinacao_semente_uso_fertilizante-outro_tipo_fertilizante"),
-            momento_usou_adubo=Constants().get_dicionario().get(
-                str(data.get("data-germinacao_semente_uso_fertilizante-momento_usou_adubo"))),
+            momento_usou_adubo=data.get("data-germinacao_semente_uso_fertilizante-momento_usou_adubo"),
             outro_momento_usou_adubo=data.get(
                 "data-germinacao_semente_uso_fertilizante-outro_momento_usou_adubo"),
-            adubo_usado=Constants().get_dicionario().get(
-                str(data.get("data-germinacao_semente_uso_fertilizante-adubo_usado"))),
-            recebeu_treinamento=Constants().get_dicionario().get(
-                str(data.get("data-treinamento-recebeu_treinamento"))),
+            adubo_usado=data.get("data-germinacao_semente_uso_fertilizante-adubo_usado"),
+            recebeu_treinamento=data.get("data-treinamento-recebeu_treinamento"),
             lugar_treinamento=Constants().get_dicionario().get(
                 str(data.get("data-treinamento-lugar_treinamento"))),
             outro_lugar_treinamento=data.get(
@@ -305,20 +301,15 @@ def refresh_sementeira_data():
                 str(data.get("data-treinamento-de_quem_recebeu_treinamento"))),
             outro_de_quem_recebeu_treinamento=data.get(
                 "data-treinamento-outro_de_quem_recebeu_treinamento"),
-            quando_recebeu_treinamento=Constants().get_dicionario().get(
-                str(data.get("data-treinamento-quando_recebeu_treinamento"))),
+            quando_recebeu_treinamento=data.get("data-treinamento-quando_recebeu_treinamento"),
             outro_quando_recebeu_treinamento=data.get(
                 "data-treinamento-outro_quando_recebeu_treinamento"),
-            tipo_treinamento=Constants().get_dicionario().get(
-                str(data.get("data-treinamento-recebeu_tipo_treinamento"))),
-            recebeu_visita_assistencia=Constants().get_dicionario().get(
-                str(data.get("data-treinamento-recebeu_visita_assistencia"))),
-            de_quem_recebeu_visita_assistencia=Constants().get_dicionario().get(
-                str(data.get("data-treinamento-de_quem_recebeu_visita"))),
+            tipo_treinamento=data.get("data-treinamento-recebeu_tipo_treinamento"),
+            recebeu_visita_assistencia=data.get("data-treinamento-recebeu_visita_assistencia"),
+            de_quem_recebeu_visita_assistencia=data.get("data-treinamento-de_quem_recebeu_visita"),
             outro_de_quem_recebeu_visita_assistencia=Constants().get_dicionario().get(
                 str(data.get("data-treinamento-outro_de_quem_recebeu_visita"))),
-            momento_recebeu_visita=Constants().get_dicionario().get(
-                str(data.get("data-treinamento-momento_recebeu_visita"))),
+            momento_recebeu_visita=data.get("data-treinamento-momento_recebeu_visita"),
             familia_nao_recebeu_treinamento=Constants().get_dicionario().get(
                 str(data.get("data-treinamento-familia_nao_recebeu_treinamento"))),
             nome_familia_nao_recebeu=data.get(
@@ -341,8 +332,7 @@ def refresh_sementeira_data():
             outro_canal_denuncia=data.get("data-vbg-outro_canal_denuncia"),
             teve_toda_assistencia=Constants().get_dicionario().get(
                 str(data.get("data-vbg-teve_toda_assistencia"))),
-            e_comum_vbg_comunidade=Constants().get_dicionario().get(
-                str(data.get("data-vbg-e_comum_vbg_comunidade"))),
+            e_comum_vbg_comunidade=data.get("data-vbg-e_comum_vbg_comunidade"),
             casos_vbg_ouviu_falar=data.get("data-vbg-casos_vbg_ouviu_falar"),
             outro_caso_vbg_ouviu_falar=data.get(
                 "data-vbg-outro_caso_vbg_ouviu_falar"),
@@ -468,9 +458,10 @@ def push_data(request):
 
 @login_required(login_url="users:login")
 def home(request):
-    inquerito_count = Inquerito.objects.all().count()
-    inquerito_nampula = Inquerito.objects.filter(provincia='Nampula').count()
+    inquerito_count = Inquerito.objects.all().count() + Sementeira.objects.all().count()
+    inquerito_nampula = Inquerito.objects.filter(provincia='Nampula').count() + Sementeira.objects.filter(provincia='Nampula').count()
     inquerito_cabo_delgado = Inquerito.objects.filter(
+        provincia='Cabo Delgado').count() + Sementeira.objects.filter(
         provincia='Cabo Delgado').count()
     context = {
         'inquerito_count': inquerito_count,

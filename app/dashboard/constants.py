@@ -178,7 +178,7 @@ class Constants:
         "depois_germinacao": "Depois da germinacao",
         "machamba_beneficiario": "Machamba do beneficiario",
         "campo_demonstracao": "Campo de demonstracao",
-        "sede_bairro": "Sede bairro",
+        "sede_bairro": "Sede do bairro",
         "durante_sacha": "Durante sacha",
         "recebeu": "Recebeu",
         "nao_recebeu": "Nao recebeu",
